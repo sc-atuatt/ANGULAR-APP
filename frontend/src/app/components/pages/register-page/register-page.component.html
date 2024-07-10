@@ -1,0 +1,57 @@
+<div class="container">
+    <div class="details">
+        <app-title title="Register"></app-title>
+        <form [formGroup]="registerForm" (ngSubmit)="submit()">
+            <div class="input-container">
+                <label >Name</label>
+                <div >
+                    <input type="name" placeholder="name" formControlName="name">
+                </div>  
+                <div class="error-list" *ngIf="fc['name'].errors && isSubmitted">
+                    <div *ngIf="fc['name'].errors['required']">Should not be empty</div>
+                   
+                </div>
+           </div>  
+            <div class="input-container">
+                 <label >Email</label>
+                 <div >
+                     <input type="email" placeholder="Email" formControlName="email">
+                 </div>  
+                 <div class="error-list" *ngIf="fc['email'].errors && isSubmitted">
+                     <div *ngIf="fc['email'].errors['required']">Should not be empty</div>
+                     <div *ngIf="fc['email'].errors['email']">Email is not correct</div>
+                 </div>
+            </div>  
+            <div class="input-container">
+                 <label >Password</label>
+                 <div >
+                     <input type="password" placeholder="Password" formControlName="password">
+                 </div>  
+                 <div class="error-list" *ngIf="fc['password'].errors && isSubmitted">
+                     <div *ngIf="fc['password'].errors['required']">Should not be empty</div>
+                 </div>
+             </div>   
+             <div class="input-container">
+                <label >ADDRESS</label>
+                <div >
+                    <input type="address" placeholder="Address" formControlName="address">
+                </div>  
+                <div class="error-list" *ngIf="fc['address'].errors && isSubmitted">
+                    <div *ngIf="fc['address'].errors['required']">Should not be empty</div>
+                   
+                </div>
+           </div>  
+             <div class="button">
+                 <button type="submit">REGISTER</button>
+             </div> 
+
+
+             <div class="login">
+                Already a user 
+                <a roterLink="/login"  >LOGIN HERE</a>
+             </div>
+
+         </form>
+
+    </div>
+</div>
