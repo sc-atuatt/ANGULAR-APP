@@ -9,10 +9,16 @@ import { FoodService } from 'src/app/services/food.service';
   styleUrls: ['./tags.component.css']
 })
 export class TagsComponent implements OnInit {
+  private token:any='';
+    
 
   tags?:Tag[]=[];
   constructor(foodService:FoodService) {
-    foodService.getAllTags().subscribe((serverTags)=>{
+    this.token=localStorage.getItem('User');
+    const jsonParsedToken = JSON.parse(this.token);
+
+    const pp=jsonParsedToken.token;
+    foodService.getAllTags(pp).subscribe((serverTags)=>{
       this.tags=serverTags;
     })
    }

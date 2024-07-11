@@ -22,7 +22,7 @@ export class UserService {
   register(userRegister:IUserRegister):Observable<User>{
     console.log("ppoiuytrtyuiiuytrertyu");
     
-    return this.http.post<User>(USER_REGISTER_URL,userRegister).pipe(
+    return this.http.post<User>(USER_REGISTER_URL,userRegister,).pipe(
       tap({
       next: (user)=>{
       this.setUserToLocalStorage(user);
@@ -39,6 +39,10 @@ export class UserService {
     return this.http.post<User>(USER_LOGIN_URL,userLogin).pipe(
       tap({
       next: (user)=>{
+        console.log('userrrrrrrrrrrrrrrrrrrrrrrr');
+        console.log(user.token);
+        
+        
       this.setUserToLocalStorage(user);
 
           this.userSubject.next(user);

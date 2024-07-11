@@ -52,7 +52,10 @@ router.post('/login',async(req,res)=>{
             if (result) {
                 // Passwords match, authentication successful
                 console.log('Passwords match! User authenticated.');
-                res.send(generateTokenResponse(user));
+                const userr=generateTokenResponse(user)
+                console.log(userr);
+                
+                res.send(userr);
             } else {
                 // Passwords don't match, authentication failed
                 console.log('Passwords do not match! Authentication failed.');
@@ -93,7 +96,8 @@ router.post('/register',async(req,res)=>{
             email: email.toLowerCase(),
             password: encryptedPassword,
             address,
-            isAdmin:false
+            isAdmin:false,
+            token:''
         };
         const dbUser=await UserModel.create(newUser);
         res.send(generateTokenResponse(dbUser));
@@ -106,13 +110,16 @@ router.post('/register',async(req,res)=>{
 })
 
 
-const  generateTokenResponse =(user:any)=>{
+const  generateTokenResponse =(user:User)=>{
+    console.log("tokennnnnnnnnnnnnnnnnnnnn");
+    
    const token=jwt.sign({
     email:user.email, idAdmin:user.isAdmin
    },"SomeRandomText",{
     expiresIn:"30d"
    })
-
+    console.log(`token==${token}`);
+    
    user.token=token;
    return user;
 }

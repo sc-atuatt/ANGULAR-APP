@@ -6,7 +6,7 @@ import dotenv from 'dotenv'
 dotenv.config();
 process.env.MONGO_URI
 import { dbConnect } from "./configs/database.config";
-
+import userAuth from "./middelware/middelware";
 dbConnect();
 
 
@@ -19,7 +19,7 @@ app.use(cors({
     origin:["http://localhost:4200"]
 }))
 
-app.use("/api/foods", foodRouter);
+app.use("/api/foods",userAuth,foodRouter);
 app.use("/api/users", userRouter);
 
 

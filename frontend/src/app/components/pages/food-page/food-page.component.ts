@@ -10,11 +10,16 @@ import { Food } from 'src/app/shared/models/food';
   styleUrls: ['./food-page.component.css']
 })
 export class FoodPageComponent implements OnInit {
+  private token:any='';
   food!:Food;
   constructor(activatedRoute:ActivatedRoute , foodService:FoodService,private cartService:CartService,private router:Router) { 
     activatedRoute.params.subscribe((params)=>{
+      this.token=localStorage.getItem('User');
+      const jsonParsedToken = JSON.parse(this.token);
+
+    const pp=jsonParsedToken.token;
       if(params['id']){
-          foodService.getFoodById(params['id']).subscribe((serverFood)=>{
+          foodService.getFoodById(params['id'],pp).subscribe((serverFood)=>{
            
             this.food=serverFood;
            

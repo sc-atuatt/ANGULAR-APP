@@ -13,22 +13,31 @@ import { Tag } from 'src/app/shared/models/Tag';
 export class HomeComponent implements OnInit {
 
   foods:Food[] = [];
+  private token:any='';
   
 
   constructor(private foodService:FoodService , activatedRoute:ActivatedRoute) 
   { 
+   
+    this.token=localStorage.getItem('User');
     let foodObservable:Observable<Food[]>;
+    console.log(this.token);
+    
+    const jsonParsedToken = JSON.parse(this.token);
+
+    const pp=jsonParsedToken.token;
+    
     activatedRoute.params.subscribe((params)=>{
       if(params['searchTerm'])
       {
-        foodObservable=this.foodService.getAllFoodsBySearchTerm(params['searchTerm'])
+        foodObservable=this.foodService.getAllFoodsBySearchTerm(params['searchTerm'],pp)
       }
       else if(params['tag'])
       {
-        foodObservable=this.foodService.getAllFoodsByTag(params['tag']);
+        foodObservable=this.foodService.getAllFoodsByTag(params['tag'],pp);
       }
       else{
-        foodObservable=foodService.getAll();
+        foodObservable=foodService.getAll(pp);
       }
       
       foodObservable.subscribe((serverFoods)=>{
