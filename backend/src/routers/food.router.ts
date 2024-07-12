@@ -13,14 +13,14 @@ router.get("/seed",async (req,res)=>{
         const foodsCount=await FoodModel.countDocuments();
         if(foodsCount>0)
         {
-         res.send("Seed is already done!");
+         res.json({message: 'Seed is already done'});
          return ;
         }
         else{
          console.log("doinggggggggggggggg");
          
          await FoodModel.create(sample_foods);
-         res.send("Seed is Done");
+         res.json({message: 'Seed is done'});
         }
        } catch (error) {
         console.log(error);
@@ -35,7 +35,7 @@ router.get("/",async(req,res)=>{
     
        try {
         const foods=await FoodModel.find();
-        res.send(foods);
+        res.status(200).send(foods);
        } catch (error) {
         console.log(error);
         res.status(500).json({message: 'Internal server error'});
@@ -48,7 +48,7 @@ router.get("/search/:searchTerm",async(req,res)=>{
         try {
             const searchReqex=new RegExp(req.params.searchTerm,'i');
         const foods =await FoodModel.find({name:{$regex:searchReqex}})
-        res.send(foods);
+        res.status(200).send(foods);
         } catch (error) {
             console.log(error);
             res.status(500).json({message: 'Internal server error'});
@@ -82,7 +82,7 @@ router.get("/tags",async(req,res)=>{
                 count:await FoodModel.countDocuments()
             }
             tags.unshift(all);
-            res.send(tags);
+            res.status(200).send(tags);
         }
          catch (error) {
             console.log(error);
@@ -109,7 +109,7 @@ router.get("/:foodId",async(req,res)=>{
         console.log(foodId+'aaaaaaaaaaaaa');
         
         const foods= await FoodModel.findById(req.params.foodId);
-        res.send(foods);
+        res.status(200).send(foods);
     } catch (error) {
         console.log(error);
         res.status(500).json({message: 'Internal server error'});

@@ -1,10 +1,11 @@
 import { Injectable } from '@angular/core';
-import { BehaviorSubject, Observable, tap } from 'rxjs';
+import { BehaviorSubject, Observable, throwError} from 'rxjs';
 import { User } from '../shared/models/User';
 import { IUserLogin } from '../shared/interfaces/IUserLogin';
-import { HttpClient } from '@angular/common/http';
+import { HttpClient, HttpErrorResponse } from '@angular/common/http';
 import { USER_LOGIN_URL, USER_REGISTER_URL } from '../shared/constants/urls';
 import { IUserRegister } from '../shared/interfaces/IUserRegister';
+import { catchError, map, tap } from 'rxjs/operators';
 const USER_KEY='User'
 @Injectable({
   providedIn: 'root'
@@ -19,38 +20,76 @@ export class UserService {
   }
 
 
-  register(userRegister:IUserRegister):Observable<User>{
+  register(userRegister:IUserRegister):Observable<any>{
     console.log("ppoiuytrtyuiiuytrertyu");
     
-    return this.http.post<User>(USER_REGISTER_URL,userRegister,).pipe(
-      tap({
-      next: (user)=>{
-      this.setUserToLocalStorage(user);
+    return this.http.post<any>(USER_REGISTER_URL,userRegister).pipe(map(data=> data));}
+    
+    
+  //   .pipe(
+  //     tap({
+  //     next: (user)=>{
+  //         this.setUserToLocalStorage(user);
+  //         this.userSubject.next(user);
+  //     },
+  //     error:(errorResponse)=>{
+  //     }
+  //   }));
+  // }
 
-          this.userSubject.next(user);
-      },
-      error:(errorResponse)=>{
-      }
-    }));
-  }
-
-  login(userLogin:IUserLogin):Observable<User>{
+  login(userLogin:IUserLogin):Observable<any>{
     console.log('mmmmmmmmmmmmmmm');
-    return this.http.post<User>(USER_LOGIN_URL,userLogin).pipe(
-      tap({
-      next: (user)=>{
-        console.log('userrrrrrrrrrrrrrrrrrrrrrrr');
-        console.log(user.token);
-        
-        
-      this.setUserToLocalStorage(user);
-
-          this.userSubject.next(user);
-      },
-      error:(errorResponse)=>{
-      }
-    }));
+    return this.http.post<any>(USER_LOGIN_URL,userLogin).pipe(map(data=> data));
+      // tap({
+      //     next: (user)=>{
+      //       console.log('userrrrrrrrrrrrrrrrrrrrrrrr');
+      //       console.log(user);
+      //       this.setUserToLocalStorage(user);
+      //       this.userSubject.next(user);
+      //     },
+      //       error:(errorResponse)=>{
+      //         console.log(errorResponse);
+              
+      //       }
+      // }),
+      // catchError(this.handleError));
+  //     return this.http.post<any>(USER_LOGIN_URL,userLogin).pipe(
+  //       tap({
+  //         next: (user)=>{
+  //           console.log('userrrrrrrrrrrrrrrrrrrrrrrr');
+  //           console.log(user);
+  //           this.setUserToLocalStorage(user);
+  //           this.userSubject.next(user);
+  //         },
+  //           error:(errorResponse)=>{
+  //             console.log(errorResponse);
+              
+  //           }
+  //     }),
+  //     catchError(this.handleError));
+      
   }
+  // private handleError(error: HttpErrorResponse) {
+  //   console.error('An error occurred:', error);
+  //   let errorMessage = 'Unknown error occurred. Please try again later.';
+  //   if (error.error instanceof ErrorEvent) {
+  //     // Client-side error
+  //     errorMessage = `Error: ${error.error.message}`;
+  //   } else {
+  //     // Server-side error
+  //     if (error.status === 408) {
+  //       errorMessage = 'Unauthorized access. Please login again.';
+  //     } else if (error.status === 403) {
+  //       errorMessage = 'Access forbidden.';
+  //     } else if (error.status === 404) {
+  //       errorMessage = 'Resource not found.';
+  //     } else {
+  //       errorMessage = `Error Code: ${error.status}\nMessage: ${error.message}`;
+  //     }
+  //   }
+  //   console.error(errorMessage);
+  //   return throwError(errorMessage);
+  // }
 
   logout(){
     console.log('tttttttttttttttt');

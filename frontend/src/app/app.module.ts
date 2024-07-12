@@ -13,8 +13,12 @@ import { CartPageComponent } from './components/pages/cart-page/cart-page.compon
 import { TitleComponent } from './components/partials/title/title.component';
 import { NotFoundComponent } from './components/partials/not-found/not-found.component';
 import { LoginPageComponent } from './components/pages/login-page/login-page.component';
-import { ReactiveFormsModule } from '@angular/forms';
+import { FormsModule, ReactiveFormsModule } from '@angular/forms';
 import { RegisterPageComponent } from './components/pages/register-page/register-page.component';
+import { ChatPageComponent } from './components/pages/chat-page/chat-page.component';
+import { SocketIoConfig, SocketIoModule } from 'ngx-socket-io';
+
+const config: SocketIoConfig = { url: 'http://localhost:6100', options: {} };
 
 
 @NgModule({
@@ -30,6 +34,7 @@ import { RegisterPageComponent } from './components/pages/register-page/register
     NotFoundComponent,
     LoginPageComponent,
     RegisterPageComponent,
+    ChatPageComponent,
    
   ],
   imports: [
@@ -37,7 +42,9 @@ import { RegisterPageComponent } from './components/pages/register-page/register
     AppRoutingModule,
     RatingModule,
     HttpClientModule,
-    ReactiveFormsModule
+    ReactiveFormsModule,
+    SocketIoModule.forRoot(config),
+    FormsModule
   ],
   providers: [],
   bootstrap: [AppComponent]

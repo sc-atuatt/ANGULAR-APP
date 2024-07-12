@@ -3,7 +3,8 @@ import { EmailValidator, FormBuilder, FormGroup, Validators } from '@angular/for
 import { ActivatedRoute, Router } from '@angular/router';
 import { UserService } from 'src/app/services/user.service';
 import { IUserRegister } from 'src/app/shared/interfaces/IUserRegister';
-
+import { User } from 'src/app/shared/models/User';
+const USER_KEY='User'
 @Component({
   selector: 'app-register-page',
   templateUrl: './register-page.component.html',
@@ -33,6 +34,15 @@ export class RegisterPageComponent implements OnInit {
   get fc(){
     return this.registerForm.controls;
   }
+  private setUserToLocalStorage(user:User){
+    localStorage.setItem(USER_KEY,JSON.stringify(user));
+  }
+
+  private getUserFromLocalStorage():User{
+    const userJson= localStorage.getItem(USER_KEY);
+    if(userJson)return JSON.parse(userJson) as User;
+    return new User();
+  }
 
   submit(){
     console.log('doneeeeeeeeeeeeeeeeeeeee');
@@ -50,8 +60,20 @@ export class RegisterPageComponent implements OnInit {
       password:fv.password,
       address:fv.address,
     };
-    this.userService.register(user).subscribe(()=>{
-      this.router.navigateByUrl(this.returnUrl);
+    this.userService.register(user).subscribe((response)=>{
+      console.log("login done");
+     console.log(response.message);
+      
+      if(response.message!='Internal server error'){
+       this.setUserToLocalStorage(response);
+       this.router.navigateByUrl(this.returnUrl);
+      }
+      else{
+          alert(response.message)
+      }
+   
+     
+     
     })
   }
 

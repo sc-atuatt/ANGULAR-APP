@@ -6,7 +6,7 @@
                 <li *ngIf="!user.token">
                     <a routerLink="/login">LOGIN</a>
                 </li>
-                <li *ngIf="!user.token" class="menu-container">
+                <li *ngIf="user.token" class="menu-container">
                     <a routerLink="/dashboard">{{user.name}}</a>
                     <div class="menu">
                         <a routerLink="/profile">Profile</a>
@@ -17,6 +17,11 @@
                 <li>
                     <a routerLink="/cart-page">
                         Cart <span *ngIf="cartQuantity">{{cartQuantity}}</span>
+                    </a>
+                </li>
+                <li>
+                    <a routerLink="/chat-page">
+                        CHAT 
                     </a>
                 </li>
             </ul>

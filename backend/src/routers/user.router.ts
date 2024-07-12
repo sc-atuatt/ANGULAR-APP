@@ -14,14 +14,14 @@ router.get('/seed',async (req,res)=>{
             
             if(usersCount>0)
             {
-            res.send("Seed is already done!");
+            res.status(409).json({message: 'Seed is already done'});
             return ;
             }
             else{
             console.log("doingggggggggggggggppppp");
             
              await UserModel.create(sample_users);
-            res.send("Seed is Done");
+            res.status(204).json({message: 'Seed is done'});
         }
        } catch (error) {
         console.log(error);
@@ -34,7 +34,10 @@ router.get('/seed',async (req,res)=>{
 router.post('/login',async(req,res)=>{
 
     try {
-       
+        console.log('pppppppppppppppppppppppllllllllllllllllll');
+        
+        console.log("body ",req.body);
+        
         const {email,password}=req.body;
         const user=await UserModel.findOne({email});
         console.log(password);
@@ -46,6 +49,7 @@ router.post('/login',async(req,res)=>{
                 if (err) {
                     // Handle error
                     console.error('Error comparing passwords:', err);
+                    res.status(400).json({message: 'Internal server error'});
                     return;
                 }
             
@@ -55,17 +59,18 @@ router.post('/login',async(req,res)=>{
                 const userr=generateTokenResponse(user)
                 console.log(userr);
                 
-                res.send(userr);
+                res.status(200).send(userr);
             } else {
                 // Passwords don't match, authentication failed
                 console.log('Passwords do not match! Authentication failed.');
-                return 
+                res.status(200).json({message: 'Internal server error'});
+                
             }
             });
             
         }
         else{
-            res.status(100).send("User name or password is not valid");
+            res.status(100).json({message: 'Internal server error'})
         }
         
     } catch (error) {
@@ -85,7 +90,7 @@ router.post('/register',async(req,res)=>{
        
         
         if(user){
-            res.status(400).send('User already exist , please login');
+            res.status(400).json({message: 'Internal server error'});
             return ;
         }
         const encryptedPassword = await bcrypt.hash(password,10);
@@ -100,7 +105,7 @@ router.post('/register',async(req,res)=>{
             token:''
         };
         const dbUser=await UserModel.create(newUser);
-        res.send(generateTokenResponse(dbUser));
+        res.status(204).send(generateTokenResponse(dbUser));
         
     } catch (error) {
         console.log(error);
